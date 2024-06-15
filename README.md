@@ -8,9 +8,9 @@ The vision for Nova is to be able to seamlessly create Machine Learning examples
 It shouldn't require 10,000 lines of boilerplate to use your GPU, nor to develop a proof of concept. This is an attempt to remediate that problem.
 
 # TODOs
-[] Object Loading
-[] Camera Implementation
-[] Shader Abstraction
+  [] Object Loading
+  [] Camera Implementation
+  [] Shader Abstraction
 
 # Example
 You can find a Makefile (that may require some modifications to your system). You may be required to install the required dependencies to run this library. Currently we are running Vulkan with SDL, but there may be opportunity in the future to grow support for DX and Metal. You can rune `make` to create the executable example, and `./compute` to run the example.
