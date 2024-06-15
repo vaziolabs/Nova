@@ -11,7 +11,7 @@
  *       Compiler:  gcc
  *
  *         Author:  Richard Isaac
- *   Organization:  NeoTec, LLC
+ *   Organization:  Big Stick Studios
  *
  * =====================================================================================
  */
@@ -19,7 +19,7 @@
 #include "./Nova.h"
 
 int main(int argc, char* argv[]) {
-    Existence* creation = Existence::manifest();    // Instantiate the World
+    Nova* creation = Nova::manifest();    // Instantiate the World
     creation->actualize();                          // Run the Simulation
     delete creation;                                // Destroy the World
 

@@ -1,10 +1,10 @@
 #include "Nova.h"
 
-Existence* _essence = nullptr;
+Nova* _essence = nullptr;
 
-Existence::Existence() 
+Nova::Nova() 
     {
-        report(LOGGER::INFO, "Existence - Constructing Graphics ..");
+        report(LOGGER::INFO, "Nova - Constructing Graphics ..");
         assert(_essence == nullptr);
         
         _application_name = "Compute Shaders";
@@ -12,9 +12,9 @@ Existence::Existence()
         _actuality = nullptr;
     }
 
-Existence::~Existence()
+Nova::~Nova()
     {
-        report(LOGGER::INFO, "Existence - The End is Nigh ..");
+        report(LOGGER::INFO, "Nova - The End is Nigh ..");
 
         if (_essence != nullptr) {
             delete _actuality;
@@ -22,13 +22,13 @@ Existence::~Existence()
         }
     }
 
-// Singleton to ensure only one instance of Existence is created.
-Existence* Existence::manifest()
+// Singleton to ensure only one instance of Nova is created.
+Nova* Nova::manifest()
     {
-        report(LOGGER::INFO, "Existence - Manifesting ..");
+        report(LOGGER::INFO, "Nova - Manifesting ..");
 
         if (_essence == nullptr) {
-            Existence* essence = new Existence();
+            Nova* essence = new Nova();
             _essence = essence->realize();
         }
 
@@ -36,10 +36,10 @@ Existence* Existence::manifest()
     }
 
 // TODO: this needs to be handled by a singleton
-Existence* Existence::realize() 
+Nova* Nova::realize() 
     {
         // Initialize the Graphics with Genesis 
-        report(LOGGER::INFO, "Existence - Graphics Complete ..");
+        report(LOGGER::INFO, "Nova - Graphics Complete ..");
 
         _actuality = new Graphics(_application_name, _window_extent);
         _actuality->initialized = true;
@@ -47,20 +47,20 @@ Existence* Existence::realize()
         return this;
     }
 
-void Existence::materialize() 
+void Nova::materialize() 
     {
-       report(LOGGER::VERBOSE, "Existence - Materializing ..");
+       report(LOGGER::VERBOSE, "Nova - Materializing ..");
        // This is where we need to handle the real time calculations and state changes
        // TODO: Implement Menu and User Input Handling and Processing
 
         return;
     }
 
-void Existence::actualize() 
+void Nova::actualize() 
     {
-        report(LOGGER::INFO, "Existence - Actualizing ..");
+        report(LOGGER::INFO, "Nova - Actualizing ..");
 
         // Do we want to pull top level SDL logic out to here?
         _actuality->illuminate();
-        //_actuality->illuminate(Existence::materialize);   
+        //_actuality->illuminate(Nova::materialize);   
     }
