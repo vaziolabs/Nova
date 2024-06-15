@@ -1,5 +1,5 @@
 #pragma once
-#include "./submodules/pipeline/pipeline.h"
+#include "./modules/pipeline/pipeline.h"
 #include "./components/lexicon.h"
 
 
