@@ -7,7 +7,7 @@ NovaExample::NovaExample()
         report(LOGGER::INFO, "NovaExample - Constructing Nova ..");
         assert(_essence == nullptr);
         
-        _application_name = "Compute Shaders";
+        _application_name = "Nova Example";
         _window_extent = { 1600, 1200 };
         _actuality = nullptr;
     }
