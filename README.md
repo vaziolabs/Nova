@@ -1,5 +1,5 @@
 # Nova
-Nova Graphics Engine is built on top of Vulkan for streamlined Compute and Rendering purposes.
+Nova Graphics Engine is built using Vulkan for streamlined Compute and Rendering purposes.
 
 The goal of this library is to make vulkan easy to use, while offering usability regarding GPU Compute resources for users primarily using AMD, and non-CUDA based GPU's, and simultaneously providing a graphics library that provides the flexibility of engines like pygame, and  that don't require large amounts of boilerplate.
 
