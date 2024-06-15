@@ -8,7 +8,7 @@
 
 #define STB_IMAGE_IMPLEMENTATION
 #include "../../components/extern/stb_image.h"
-const char* TEXTURE_PATH = "/home/persist/z/Ancillary/Big Stick Studios/repos/learning/Cpp/Vulkan/Compute Shaders/modules/graphics/engine/components/extern/texture.png";
+const char* TEXTURE_PATH = "/home/persist/mine/repos/bs/Nova/Core/components/extern/texture.png";
 
 // Do we need to move this to the graphics pipeline?
 
@@ -27,7 +27,7 @@ static const VkImageLayout _IMAGE_LAYOUT_UNDEFINED = VK_IMAGE_LAYOUT_UNDEFINED;
 static const VkImageLayout _IMAGE_LAYOUT_READ_ONLY = VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL;
         
 
-void Nova::constructVertexBuffer() 
+void NovaCore::constructVertexBuffer() 
     {
         report(LOGGER::VLINE, "\t .. Creating Vertex Buffer ..");
 
@@ -51,7 +51,7 @@ void Nova::constructVertexBuffer()
         return;
     }
 
-void Nova::constructIndexBuffer() 
+void NovaCore::constructIndexBuffer() 
     {
         report(LOGGER::VLINE, "\t .. Creating Index Buffer ..");
 
@@ -74,10 +74,10 @@ void Nova::constructIndexBuffer()
         return;
     }
 
-void Nova::destroyVertexContext() 
+void NovaCore::destroyVertexContext() 
     { report(LOGGER::VERBOSE, "Scene - Destroying Vertex Context .."); destroyBuffer(&vertex); return; }
 
-void Nova::destroyIndexContext() 
+void NovaCore::destroyIndexContext() 
     { report(LOGGER::VERBOSE, "Scene - Destroying Vertex Context .."); destroyBuffer(&index); return; }
 
     /////////////////////////////
@@ -87,7 +87,7 @@ void Nova::destroyIndexContext()
 static const VkBufferUsageFlags _uniform_usage = VK_BUFFER_USAGE_UNIFORM_BUFFER_BIT;
 static const VkMemoryPropertyFlags _uniform_properties = VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT;
 
-void Nova::constructUniformBuffer() 
+void NovaCore::constructUniformBuffer() 
     {
         report(LOGGER::VLINE, "\t .. Creating Uniform Buffer ..");
 
@@ -104,7 +104,7 @@ void Nova::constructUniformBuffer()
             }
     }
 
-void Nova::updateUniformBuffer(uint32_t current_frame)
+void NovaCore::updateUniformBuffer(uint32_t current_frame)
     {
         static auto _s_t = std::chrono::high_resolution_clock::now();
 
@@ -122,7 +122,7 @@ void Nova::updateUniformBuffer(uint32_t current_frame)
         memcpy(uniform_data[current_frame], &_mvp, sizeof(MVP));
     }
 
-void Nova::destroyUniformContext() 
+void NovaCore::destroyUniformContext() 
     {
         report(LOGGER::VERBOSE, "Scene - Destroying Uniform Context ..");
 
@@ -175,7 +175,7 @@ static inline VkImageMemoryBarrier getMemoryBarrier(VkImage& image, VkImageLayou
         };
     }
 
-inline void Nova::transitionImageLayout(VkImage image, VkFormat format, VkImageLayout old_layout, VkImageLayout new_layout) 
+inline void NovaCore::transitionImageLayout(VkImage image, VkFormat format, VkImageLayout old_layout, VkImageLayout new_layout) 
     {
         report(LOGGER::VLINE, "\t .. Transitioning Image Layout ..");
         VkCommandBuffer _ephemeral_cmd = createEphemeralCommand(queues.xfr.pool);
@@ -230,7 +230,7 @@ static inline VkBufferImageCopy getImageCopyRegion(uint32_t width, uint32_t heig
         };
     }
 
-inline void Nova::copyBufferToImage(VkBuffer& buffer, VkImage& image, uint32_t width, uint32_t height) 
+inline void NovaCore::copyBufferToImage(VkBuffer& buffer, VkImage& image, uint32_t width, uint32_t height) 
     {
         report(LOGGER::VLINE, "\t .. Copying Buffer to Image ..");
 
@@ -245,7 +245,7 @@ inline void Nova::copyBufferToImage(VkBuffer& buffer, VkImage& image, uint32_t w
         return;
     }
 
-void Nova::createTextureImage() 
+void NovaCore::createTextureImage() 
     {
         report(LOGGER::VLINE, "\t .. Creating Texture Buffer ..");
 

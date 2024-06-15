@@ -3,7 +3,7 @@
 #include "./components/lexicon.h"
 
 
-class Nova {
+class NovaCore {
     public:
         VkInstance instance;
         VkPhysicalDevice physical_device;
@@ -14,8 +14,8 @@ class Nova {
 
         bool framebuffer_resized = false;
 
-        Nova(VkExtent2D);
-        ~Nova();
+        NovaCore(VkExtent2D);
+        ~NovaCore();
 
         void log();
 

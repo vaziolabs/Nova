@@ -1,21 +1,38 @@
 #pragma once
-#include "./engine/engine.h"
-#include <string>
+#include "./Core/core.h"
 
+#include <string>
+#include <future>
+
+// The goal of this layer of abstraction is to create a friendly user implementation for creating a graphics engine, for future projects.
+
+// TODO: Cross Platform Support
 class Nova {
     public:
-        Nova();
+        bool initialized = false;
+
+        Nova(std::string, VkExtent2D);
         ~Nova();
 
-        static Nova* manifest();   // Singleton
+        // TODO: Determine Default Initializers 
+        
 
-        static void materialize();      // Draw
-        void actualize();               // Run
-    
+        void illuminate();
+        //void illuminate(fnManifest);
+
     private:
         std::string _application_name;
+        bool _suspended = false;
         VkExtent2D _window_extent;
-        Graphics* _actuality;
+        struct SDL_Window* _window = nullptr;
+        NovaCore* _architect;
 
-        Nova* realize();            // Init
+        VkDebugUtilsMessengerEXT _debug_messenger;
+
+        void _initFramework();
+        void _initSwapChain(std::promise<void>&, std::future<void>&, std::promise<void>&);
+        void _initPipeline(std::future<void>&, std::promise<void>&);
+        void _initBuffers();
+        void _initSyncStructures();
+        void _resizeWindow();
 };
