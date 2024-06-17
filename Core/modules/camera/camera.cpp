@@ -55,3 +55,9 @@ glm::mat4 Camera::getViewMatrix()
         glm::mat4 c_translation = glm::translate(-position);
         return c_rotation * c_translation;
     }
+
+void Camera::setRearView()
+    {
+        pitch = -pitch;
+        yaw = -yaw;
+    }
