@@ -12,7 +12,7 @@ class NovaCore {
         Queues queues;
         SwapChainContext swapchain;
         VkSurfaceKHR surface;
-        Camera fps_camera;
+        Camera player_camera;
 
         bool framebuffer_resized = false;
 
