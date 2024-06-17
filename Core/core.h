@@ -1,5 +1,6 @@
 #pragma once
 #include "./modules/pipeline/pipeline.h"
+#include "./modules/camera/camera.h"
 #include "./components/lexicon.h"
 
 
@@ -11,6 +12,7 @@ class NovaCore {
         Queues queues;
         SwapChainContext swapchain;
         VkSurfaceKHR surface;
+        Camera fps_camera;
 
         bool framebuffer_resized = false;
 

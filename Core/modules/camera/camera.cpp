@@ -41,3 +41,17 @@ void Camera::processEvents(SDL_Event& e)
                 pitch -= (float)e.motion.yrel / 200.f;
             }
     }
+
+glm::mat4 Camera::getRotationMatrix()
+    {
+        glm::quat q = glm::quat(glm::vec3(pitch, yaw, roll)); // No clue if this works, or if I need to calculate  the angleAxis per axis
+        return glm::mat4_cast(q);
+    }
+
+glm::mat4 Camera::getViewMatrix()
+    {
+        // The log
+        glm::mat4 c_rotation = getRotationMatrix();
+        glm::mat4 c_translation = glm::translate(-position);
+        return c_rotation * c_translation;
+    }
