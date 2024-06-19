@@ -1,5 +1,6 @@
 #include "obj_loader.h"
 #include "logger.h"
+#define GLM_ENABLE_EXPERIMENTAL
 #include <glm/gtx/quaternion.hpp>
 
 #include "./extern/fastgltf/include/fastgltf/glm_element_traits.hpp"
@@ -14,7 +15,7 @@ std::optional<std::vector<std::shared_ptr<MeshType>>> loadGLTFMeshes(NovaCore* e
     data.FromPath(path);
 
     // Then we set the options for the parser
-    constexpr auto gltf_ops = fastgltf::Options::LoadGLBBuffers | fastgltf::Options::LoadExternalBuffers;
+    constexpr auto gltf_ops = fastgltf::Options::LoadExternalBuffers;
     fastgltf::Asset gltf;
     fastgltf::Parser parser;
 
@@ -125,7 +126,7 @@ std::optional<std::vector<std::shared_ptr<MeshType>>> loadGLTFMeshes(NovaCore* e
                     { vtx.color = glm::vec4(vtx.normal, 1.0f); }
             }
 
-        new_mesh.buffer = engine->createMeshBuffer(vertices, indices);
+        new_mesh.buffer = engine->createMeshBuffer(indices, vertices);
         meshes.emplace_back(std::make_shared<MeshType>(new_mesh));
     }
 

@@ -1,13 +1,13 @@
 #pragma once
 #include "../../components/lexicon.h"
 #include "../../components/vertex.h"
+#include "../../components/vk_memory.h"
 
 #include <optional>
 #include <vector>
 #include <deque>
 #include <functional>
 #include <glm/glm.hpp>
-#include <vk_memory.h>
 
 
     //////////////////

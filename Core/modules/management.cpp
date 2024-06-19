@@ -1,5 +1,5 @@
 #include "../core.h"
-
+#include "../components/vk_memory.h"
 
     ///////////////////////////
     // PIPELINE CONSTRUCTION //
@@ -461,8 +461,8 @@ static inline VmaAllocationCreateInfo getVMAAllocationInfo(VmaMemoryUsage mem_us
         report(LOGGER::VLINE, "\t .. Creating VMA Allocation Info ..");
 
         return {
+            .flags = VMA_ALLOCATION_CREATE_MAPPED_BIT,
             .usage = mem_usage,
-            .flags = VMA_ALLOCATION_CREATE_MAPPED_BIT
         };
     }
 
