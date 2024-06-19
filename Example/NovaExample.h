@@ -1,6 +1,5 @@
 #pragma once
 #include "../Nova.h"
-#include <string>
 
 class NovaExample {
     public:
@@ -13,8 +12,7 @@ class NovaExample {
         void actualize();               // Run
     
     private:
-        std::string _application_name;
-        VkExtent2D _window_extent;
+        NovaConfig _config;
         Nova* _actuality;
 
         NovaExample* realize();            // Init

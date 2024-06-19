@@ -1,4 +1,6 @@
 #include "NovaExample.h"
+#include "../Core/components/debug_level.h"
+
 
 NovaExample* _essence = nullptr;
 
@@ -7,8 +9,11 @@ NovaExample::NovaExample()
         report(LOGGER::INFO, "NovaExample - Constructing Nova ..");
         assert(_essence == nullptr);
         
-        _application_name = "Nova Example";
-        _window_extent = { 1600, 1200 };
+        _config = { 
+                "Nova Example", 
+                { 1600, 1200 }, 
+                "development"
+            };
         _actuality = nullptr;
     }
 
@@ -27,6 +32,10 @@ NovaExample* NovaExample::manifest()
     {
         report(LOGGER::INFO, "NovaExample - Manifesting ..");
 
+        // This is not required, but it is a good practice to ensure only one instance is created.. 
+        // This is particularly useful when we get to the point of using cloud level instantiation and want to pass
+        // the same instance to multiple clients (not users but services).
+        // Really this level of wrapping is redundant, but it's nice for static analysis and code review.
         if (_essence == nullptr) {
             NovaExample* essence = new NovaExample();
             _essence = essence->realize();
@@ -35,18 +44,22 @@ NovaExample* NovaExample::manifest()
         return _essence;
     }
 
-// TODO: this needs to be handled by a singleton
+// TODO: this could be handled by a singleton too, but at that level we would need to refactor the above
+// and abstract or embed this 'singleton' into the Nova class. .. We will do this once we are properly using the 'materialize' function.
 NovaExample* NovaExample::realize() 
     {
         // Initialize the Graphics with Genesis 
         report(LOGGER::INFO, "NovaExample - Nova Complete ..");
 
-        _actuality = new Nova(_application_name, _window_extent);
+        _actuality = new Nova(_config);
         _actuality->initialized = true;
 
         return this;
     }
 
+// This is something we want to be able to define on the parent level for the game engine, 
+// but also to be able to 'embed' and pass through into the main game loop.
+// This essentially runs inside of our render loop.
 void NovaExample::materialize() 
     {
        report(LOGGER::VERBOSE, "NovaExample - Materializing ..");
