@@ -1,12 +1,30 @@
 #include "logger.h"
-
 #include <iostream>
 #include <cstdarg>
 
+static LOGGER getLogLevel (DEBUG_LEVEL dbg_lvl) {
+    switch (dbg_lvl) {
+        case DEBUG_LEVEL::SILENT:
+            return LOGGER::OFF;
+        case DEBUG_LEVEL::RELEASE:
+            return LOGGER::ERROR;
+        case DEBUG_LEVEL::STAGING:
+            return LOGGER::INFO;
+        case DEBUG_LEVEL::DEV:
+            return LOGGER::DEBUG;
+        case DEBUG_LEVEL::LOUD:
+            return LOGGER::VERBOSE;
+        default:
+            return LOGGER::OFF;
+    }
+};
 
-static bool letsGo(LOGGER level) {
-    return level <= LOG_LEVEL;
-}
+void setLogLevel(DEBUG_LEVEL level) 
+    { LOG_LEVEL = getLogLevel(level); return; }
+
+
+static bool letsGo(LOGGER level) 
+    { return level <= LOG_LEVEL; }
 
 void report(LOGGER log_level, const char* format, ...){
         std::va_list args;

@@ -1,5 +1,7 @@
 #pragma once
 #include "./Core/core.h"
+#include "./Core/config.h"
+
 
 #include <string>
 #include <future>
@@ -11,7 +13,7 @@ class Nova {
     public:
         bool initialized = false;
 
-        Nova(std::string, VkExtent2D);
+        Nova(NovaConfig);
         ~Nova();
 
         // TODO: Determine Default Initializers 
@@ -21,9 +23,8 @@ class Nova {
         //void illuminate(fnManifest);
 
     private:
-        std::string _application_name;
+        NovaConfig _config;
         bool _suspended = false;
-        VkExtent2D _window_extent;
         struct SDL_Window* _window = nullptr;
         NovaCore* _architect;
 

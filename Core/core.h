@@ -14,7 +14,7 @@ class NovaCore {
 
         bool framebuffer_resized = false;
 
-        NovaCore(VkExtent2D);
+        NovaCore(VkExtent2D, std::string&);
         ~NovaCore();
 
         void log();

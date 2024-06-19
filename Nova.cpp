@@ -11,24 +11,22 @@
     ///////////////////
 
 
-Nova::Nova(std::string name, VkExtent2D window_extent)
+Nova::Nova(NovaConfig config)
     {
         report(LOGGER::INFO, "Nova - Instantiating ..");
 
-        // Set the application name and window extent
-        _application_name = name;
-        _window_extent = window_extent;
+        _config = config;
         
         // Initialize SDL and create a window
         SDL_Init(SDL_INIT_VIDEO);
         SDL_WindowFlags window_flags = (SDL_WindowFlags)(SDL_WINDOW_VULKAN | SDL_WINDOW_RESIZABLE | SDL_WINDOW_ALLOW_HIGHDPI);
 
         _window = SDL_CreateWindow(
-            name.c_str(),
+            config.name.c_str(),
             SDL_WINDOWPOS_UNDEFINED,
             SDL_WINDOWPOS_UNDEFINED,
-            _window_extent.width,
-            _window_extent.height,
+            config.window_size.width,
+            config.window_size.height,
             window_flags
         );
 
@@ -47,7 +45,7 @@ Nova::Nova(std::string name, VkExtent2D window_extent)
         // Scene()
         // Render()
 
-        _architect = new NovaCore(_window_extent);
+        _architect = new NovaCore(config.window_size, config.debug_level);
         _initFramework(); // Do we want to handle this in the Nova?
 
         _architect->swapchain.support = _architect->querySwapChainSupport(_architect->physical_device);
@@ -232,11 +230,10 @@ inline void Nova::_resizeWindow()
         int w, h;
         SDL_Vulkan_GetDrawableSize(_window, &w, &h);
         
+        _config.window_size.width = w;
+        _config.window_size.height = h;
 
-        _window_extent.width = w;
-        _window_extent.height = h;
-
-        _architect->setWindowExtent(_window_extent);
+        _architect->setWindowExtent(_config.window_size);
         _architect->framebuffer_resized = true;
         return;
     }   

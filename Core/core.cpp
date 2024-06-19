@@ -9,10 +9,11 @@ FrameData& NovaCore::current_frame() { { return frames[_frame_ct % MAX_FRAMES_IN
     //  INSTANCE CREATION //
     ////////////////////////
 
-NovaCore::NovaCore(VkExtent2D extent) 
+NovaCore::NovaCore(VkExtent2D extent, std::string& level) 
     {
         _blankContext();
         setWindowExtent(extent);
+        setDebugLevel(level);
         createVulkanInstance();
         // TODO: Inline Initialization to be done here instead of the constructor of the top level
         // 
