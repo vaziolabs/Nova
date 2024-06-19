@@ -330,7 +330,7 @@ VkMemoryAllocateInfo NovaCore::getMemoryAllocateInfo(VkMemoryRequirements mem_re
         };
     }
 
-static inline VkBufferCreateInfo getBufferInfo(VkDeviceSize size, VkBufferUsageFlags usage)
+inline VkBufferCreateInfo NovaCore::getBufferInfo(VkDeviceSize size, VkBufferUsageFlags usage)
     {
         report(LOGGER::VLINE, "\t\t .. Creating Buffer Info ..");
 

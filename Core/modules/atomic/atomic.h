@@ -7,7 +7,43 @@
 #include <deque>
 #include <functional>
 #include <glm/glm.hpp>
+#include <vk_memory.h>
 
+
+    //////////////////
+    // Object Types //
+    //////////////////
+
+// These could possibly be moved to ObjectLoader
+struct Vertex_T {
+    glm::vec3 position; // TODO: figure out how to include vec4 for physics
+    glm::vec3 normal;
+    glm::vec2 uv_coord;
+    glm::vec4 color;
+};
+
+struct VertexRange {
+    size_t start;
+    size_t end;
+};
+
+struct Buffer_T {
+    VkBuffer buffer;
+    VmaAllocation allocation;
+    VmaAllocationInfo info;
+};
+
+struct MeshBuffer {
+    Buffer_T idx_buffer;
+    Buffer_T vtx_buffer;
+    VkDeviceAddress buffer_address;
+};
+
+struct MeshType {
+    std::string name;
+    std::vector<VertexRange> meshes;
+    MeshBuffer buffer;
+};
 
 typedef void (*fnManifest)();
 
@@ -65,6 +101,12 @@ struct QueueFamilyIndices
         }
     };
 
+struct Immediate
+    {
+        VkFence fence;
+        VkCommandBuffer cmd;
+    };
+
 // This could be a class that constructs queues and families dynamically
 struct Queues 
     {
@@ -81,6 +123,8 @@ struct Queues
         std::vector<VkQueueFamilyProperties> families;
         QueueFamilyIndices indices;
         std::vector<std::vector<float>> priorities;
+
+        Immediate immediate;
     };
 
 struct SwapChainSupportDetails 
