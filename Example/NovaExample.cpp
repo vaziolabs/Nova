@@ -9,11 +9,6 @@ NovaExample::NovaExample()
         report(LOGGER::INFO, "NovaExample - Constructing Nova ..");
         assert(_essence == nullptr);
         
-        _config = { 
-                "Nova Example", 
-                { 1600, 1200 }, 
-                "development"
-            };
         _actuality = nullptr;
     }
 
@@ -50,6 +45,15 @@ NovaExample* NovaExample::realize()
     {
         // Initialize the Graphics with Genesis 
         report(LOGGER::INFO, "NovaExample - Nova Complete ..");
+
+        _config = { 
+                .name = "Nova Example", 
+                .screen = { 1600, 1200 }, 
+                .debug_level = "development",
+                .dimensions = "3D",
+                .camera_type = "orbit",
+                .compute = true,
+            };
 
         _actuality = new Nova(_config);
         _actuality->initialized = true;

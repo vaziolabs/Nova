@@ -25,8 +25,8 @@ Nova::Nova(NovaConfig config)
             config.name.c_str(),
             SDL_WINDOWPOS_UNDEFINED,
             SDL_WINDOWPOS_UNDEFINED,
-            config.window_size.width,
-            config.window_size.height,
+            config.screen.width,
+            config.screen.height,
             window_flags
         );
 
@@ -45,7 +45,7 @@ Nova::Nova(NovaConfig config)
         // Scene()
         // Render()
 
-        _architect = new NovaCore(config.window_size, config.debug_level);
+        _architect = new NovaCore(config.screen, config.debug_level);
         _initFramework(); // Do we want to handle this in the Nova?
 
         _architect->swapchain.support = _architect->querySwapChainSupport(_architect->physical_device);
@@ -231,10 +231,10 @@ inline void Nova::_resizeWindow()
         int w, h;
         SDL_Vulkan_GetDrawableSize(_window, &w, &h);
         
-        _config.window_size.width = w;
-        _config.window_size.height = h;
+        _config.screen.width = w;
+        _config.screen.height = h;
 
-        _architect->setWindowExtent(_config.window_size);
+        _architect->setWindowExtent(_config.screen);
         _architect->framebuffer_resized = true;
         return;
     }   
