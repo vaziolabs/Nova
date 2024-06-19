@@ -3,4 +3,4 @@
 	url = git@github.com:tinyobjloader/tinyobjloader.git
 [submodule "Core/components/extern/fastgltf"]
 	path = Core/components/extern/fastgltf
-	url = git@github.com:spnda/fastgltf.git
+	url = git@github.com:BigStickStudio/fastgltf.git
