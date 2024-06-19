@@ -1,12 +1,12 @@
 VULKAN_SDK_PATH = /usr/include/vulkan
 STB_PATH = /usr/include/stb
-TINYOBJ_PATH = /usr/include/
+TINYOBJ_PATH = ../Core/external/tinyobj/
 VK_EXP_PATH = /etc/vulkan/explicit_layer.d
 
 CFLAGS = -std=c++17 -I $(VULKAN_SDK_PATH) -I $(STB_PATH) -I $(TINYOBJ_PATH)
 LDFLAGS = -L $(VULKAN_SDK_PATH) -lSDL2 -lvulkan -ldl -pthread 
 DBFLAGS = -fsanitize=address,undefined --debug
-INCLUDES = ../*.cpp ../*/*.cpp ../*/*/*.cpp ../*/*/*/*.cpp
+INCLUDES = ../*.cpp ../*/*.cpp ../*/*/*.cpp ../*/*/*/*.cpp ../Core
 
 compute: main.cpp
 	g++ $(CFLAGS) -o compute $(LDFLAGS) $(INCLUDES)

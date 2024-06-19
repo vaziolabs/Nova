@@ -1,4 +1,4 @@
-#include "core.h"
+#include "./core.h"
 
 #include <SDL2/SDL_vulkan.h>
 
@@ -15,6 +15,8 @@ NovaCore::NovaCore(VkExtent2D extent, std::string& level)
         setWindowExtent(extent);
         setDebugLevel(level);
         createVulkanInstance();
+        
+        
         // TODO: Inline Initialization to be done here instead of the constructor of the top level
         // 
 

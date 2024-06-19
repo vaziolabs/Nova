@@ -129,6 +129,7 @@ void Nova::illuminate()
                                 }
                         }
 
+                    _architect->player_camera.processEvents(_e);
                 }
             
             if (_suspended) 
