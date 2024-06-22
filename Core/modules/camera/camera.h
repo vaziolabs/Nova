@@ -18,7 +18,7 @@ class Camera
             void switchCamera();
             void rearView();
 
-            glm::vec3 position{0.0f, -5.0f, 0.0f};
+            glm::vec3 position{0.0f, -1.0f, 0.0f};
             glm::vec3 relative_camera_offset{0.0f, 0.0f, 0.0f};
             glm::vec3 velocity{0.0f, 0.0f, 0.0f};
             glm::vec3 acceleration{0.0f, 0.0f, 0.0f};

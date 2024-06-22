@@ -1,4 +1,5 @@
 #include "../core.h"
+#define VMA_IMPLEMENTATION
 #include "../components/vk_memory.h"
 
     ///////////////////////////
