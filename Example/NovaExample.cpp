@@ -1,6 +1,4 @@
 #include "NovaExample.h"
-#include "../Core/components/debug_level.h"
-
 
 NovaExample* _essence = nullptr;
 
@@ -49,12 +47,12 @@ NovaExample* NovaExample::realize()
         _config = { 
                 .name = "Nova Example", 
                 .screen = { 1600, 1200 }, 
-                .debug_level = "development",
+                .debug_level = "debug",
                 .dimensions = "3D",
                 .camera_type = "orbit",
                 .compute = true,
-            };
-
+            }; // This needs to be a drop in at the parent level.
+        report(LOGGER::INFO, "NovaExample - Configuring Nova with debug level: %s", _config.debug_level.c_str());
         _actuality = new Nova(_config);
         _actuality->initialized = true;
 
@@ -78,6 +76,6 @@ void NovaExample::actualize()
         report(LOGGER::INFO, "NovaExample - Actualizing ..");
 
         // Do we want to pull top level SDL logic out to here?
-        _actuality->illuminate();
+        _actuality->illuminate(); // This needs to be a function that is defined in the Nova class.
         //_actuality->illuminate(NovaExample::materialize);   
     }
