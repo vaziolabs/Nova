@@ -1,9 +1,10 @@
 #include "logger.h"
 #include <iostream>
 #include <cstdarg>
+#include "./debug_level.h"
 
-static LOGGER getLogLevel (DEBUG_LEVEL dbg_lvl) {
-    switch (dbg_lvl) {
+static LOGGER getLogLevel (const char* dbg_lvl) {
+    switch (getDebugLevel(dbg_lvl)) {
         case DEBUG_LEVEL::SILENT:
             return LOGGER::OFF;
         case DEBUG_LEVEL::RELEASE:
@@ -19,8 +20,30 @@ static LOGGER getLogLevel (DEBUG_LEVEL dbg_lvl) {
     }
 };
 
-void setLogLevel(DEBUG_LEVEL level) 
-    { LOG_LEVEL = getLogLevel(level); return; }
+static DEBUG_LEVEL getDebugLevel (LOGGER log_level) {
+    switch (log_level) {
+        case LOGGER::OFF:
+            return DEBUG_LEVEL::SILENT;
+        case LOGGER::ERROR:
+            return DEBUG_LEVEL::RELEASE;
+        case LOGGER::INFO:
+            return DEBUG_LEVEL::STAGING;
+        case LOGGER::DEBUG:
+            return DEBUG_LEVEL::DEV;
+        case LOGGER::VERBOSE:
+            return DEBUG_LEVEL::LOUD;
+        default:
+            return DEBUG_LEVEL::INVALID;
+    }
+
+};
+
+void setLogLevel(const char* debug_level) 
+    { 
+        LOG_LEVEL = getLogLevel(debug_level); 
+        report(LOGGER::INFO, "Logger - Debug Level set to %s ..", debugString(getDebugLevel(LOG_LEVEL))); 
+        return; 
+    }
 
 
 static bool letsGo(LOGGER level) 

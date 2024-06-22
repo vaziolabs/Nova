@@ -13,7 +13,6 @@ NovaCore::NovaCore(VkExtent2D extent, std::string& level)
     {
         _blankContext();
         setWindowExtent(extent);
-        setDebugLevel(level);
         createVulkanInstance();
         
         

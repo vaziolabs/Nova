@@ -1,5 +1,5 @@
 #pragma once
-#include "./debug_level.h"
+#include <string>
 
 enum LOGGER {
     OFF,
@@ -12,7 +12,7 @@ enum LOGGER {
     VERBOSE
 };
 
-static LOGGER LOG_LEVEL = LOGGER::INFO;
+static LOGGER LOG_LEVEL = LOGGER::VERBOSE;
 
 void report(LOGGER log_level, const char* message, ...);
-void setLogLevel(DEBUG_LEVEL level);
+void setLogLevel(const char* debug_level);

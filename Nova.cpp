@@ -15,7 +15,7 @@ Nova::Nova(NovaConfig config)
     {
         report(LOGGER::INFO, "Nova - Instantiating ..");
 
-        _config = config;
+        setLogLevel(config.debug_level.c_str());
         
         // Initialize SDL and create a window
         SDL_Init(SDL_INIT_VIDEO);
