@@ -100,7 +100,7 @@ void NovaCore::constructUniformBuffer()
             {
                 createBuffer(_buffer_size, _uniform_usage, _uniform_properties, &uniform[i]);
                 vkMapMemory(logical_device, uniform[i].memory, 0, _buffer_size, 0, &uniform_data[i]);
-                queues.deletion.push_fn([=]() { vkUnmapMemory(logical_device, uniform[i].memory); });
+                queues.deletion.push_fn([this, i]() { vkUnmapMemory(logical_device, uniform[i].memory); });
             }
     }
 
@@ -292,8 +292,8 @@ void NovaCore::createTextureImage()
         transitionImageLayout(graphics_pipeline->texture_image, _FORMAT, _IMAGE_LAYOUT_BIT, _IMAGE_LAYOUT_READ_ONLY);
 
         // We need to trigger the texture image to be deleted before the pipeline goes out of scope
-        queues.deletion.push_fn([=]() { vkDestroyImage(logical_device, graphics_pipeline->texture_image, nullptr); });
-        queues.deletion.push_fn([=]() { vkFreeMemory(logical_device, graphics_pipeline->texture_image_memory, nullptr); });
+        queues.deletion.push_fn([this]() { vkDestroyImage(logical_device, graphics_pipeline->texture_image, nullptr); });
+        queues.deletion.push_fn([this]() { vkFreeMemory(logical_device, graphics_pipeline->texture_image_memory, nullptr); });
 
         // Clean up the staging buffer
         destroyBuffer(&_staging);

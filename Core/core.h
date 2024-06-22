@@ -2,6 +2,7 @@
 #include "./modules/pipeline/pipeline.h"
 #include "./modules/camera/camera.h"
 #include "./components/lexicon.h"
+#include <span>
 
 
 class NovaCore {
@@ -43,7 +44,7 @@ class NovaCore {
         void createSyncObjects();
         void constructGraphicsPipeline();
         void constructComputePipeline();
-        
+        MeshBuffer createMeshBuffer(std::span<uint32_t>, std::span<Vertex_T>);
         void drawFrame();
 
     private:
@@ -60,6 +61,7 @@ class NovaCore {
         const VkClearValue CLEAR_COLOR = {{{0.0f, 0.0f, 0.0f, 1.0f}}};
         FrameData& current_frame();
         int _frame_ct = 0;
+        VmaAllocator allocator;
 
         void logQueues();
         void logSwapChain();
@@ -72,6 +74,7 @@ class NovaCore {
         void getQueueFamilies(VkPhysicalDevice);
         VkDeviceQueueCreateInfo getQueueCreateInfo(uint32_t);
         void setQueueFamilyProperties(unsigned int);
+        void immediateSubmit(std::function<void(VkCommandBuffer)>&&);
 
         VkMemoryAllocateInfo getMemoryAllocateInfo(VkMemoryRequirements, VkMemoryPropertyFlags);
 
@@ -90,11 +93,13 @@ class NovaCore {
         VkCommandBuffer createEphemeralCommand(VkCommandPool&);
         void flushCommandBuffer(VkCommandBuffer&, char*);
 
+        VkBufferCreateInfo getBufferInfo(VkDeviceSize, VkBufferUsageFlags);
         void createBuffer(VkDeviceSize, VkBufferUsageFlags, VkMemoryPropertyFlags, BufferContext*);
         void copyBuffer(VkBuffer, VkBuffer, VkDeviceSize);
         void recordCommandBuffers(VkCommandBuffer&, uint32_t); 
         void resetCommandBuffers();
         void updateUniformBuffer(uint32_t);
+        Buffer_T createEphemeralBuffer(size_t, VkBufferUsageFlags, VmaMemoryUsage);
 
         void transitionImageLayout(VkImage, VkFormat, VkImageLayout, VkImageLayout);
         void copyBufferToImage(VkBuffer&, VkImage&, uint32_t, uint32_t);

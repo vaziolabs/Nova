@@ -1,5 +1,5 @@
 #include "../core.h"
-
+#include "../components/vk_memory.h"
 
     ///////////////////////////
     // PIPELINE CONSTRUCTION //
@@ -454,4 +454,120 @@ void NovaCore::createSyncObjects()
         }
 
         return;
+    }
+
+static inline VmaAllocationCreateInfo getVMAAllocationInfo(VmaMemoryUsage mem_usage)
+    {
+        report(LOGGER::VLINE, "\t .. Creating VMA Allocation Info ..");
+
+        return {
+            .flags = VMA_ALLOCATION_CREATE_MAPPED_BIT,
+            .usage = mem_usage,
+        };
+    }
+
+Buffer_T NovaCore::createEphemeralBuffer(size_t size, VkBufferUsageFlags flags, VmaMemoryUsage mem_usage)
+    {
+        report(LOGGER::VLINE, "\t .. Creating Ephemeral Buffer ..");
+
+        Buffer_T buffer;
+    
+        VkBufferCreateInfo _buffer_info = getBufferInfo(size, flags);
+        VmaAllocationCreateInfo _alloc_info = getVMAAllocationInfo(mem_usage);
+
+        VK_TRY(vmaCreateBuffer(allocator, &_buffer_info, &_alloc_info, &buffer.buffer, &buffer.allocation, nullptr));
+
+        return buffer;
+    }
+
+static inline VkCommandBufferSubmitInfo getBufferSubmitInfo(VkCommandBuffer cmd)
+    {
+        report(LOGGER::VLINE, "\t .. Creating Buffer Submit Info ..");
+
+        return {
+            .sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_SUBMIT_INFO,
+            .pNext = nullptr,
+            .commandBuffer = cmd,
+            .deviceMask = 0,
+        };
+    }
+
+static inline VkSubmitInfo2 getSubmitInfo2(VkCommandBufferSubmitInfo* cmd)
+    {
+        report(LOGGER::VLINE, "\t .. Creating Submit Info 2 ..");
+
+        return {
+            .sType = VK_STRUCTURE_TYPE_SUBMIT_INFO_2,
+            .pNext = nullptr,
+            .waitSemaphoreInfoCount = 0,
+            .pWaitSemaphoreInfos = nullptr,
+            .commandBufferInfoCount = 1,
+            .pCommandBufferInfos = cmd,
+            .signalSemaphoreInfoCount = 0,
+            .pSignalSemaphoreInfos = nullptr
+        };
+    }
+
+void NovaCore::immediateSubmit(std::function<void(VkCommandBuffer)>&& func)
+    {
+        VK_TRY(vkResetFences(logical_device, 1, &queues.immediate.fence));
+        VK_TRY(vkResetCommandBuffer(queues.immediate.cmd, 0));
+
+        VkCommandBuffer cmd = queues.immediate.cmd;
+        VkCommandBufferBeginInfo _begin_info = createBeginInfo();
+        _begin_info.flags = VK_COMMAND_BUFFER_USAGE_ONE_TIME_SUBMIT_BIT;
+
+        VK_TRY(vkBeginCommandBuffer(cmd, &_begin_info));
+        func(cmd);
+        VK_TRY(vkEndCommandBuffer(cmd));
+
+        VkCommandBufferSubmitInfo _cmd_submit_info = getBufferSubmitInfo(cmd);
+        VkSubmitInfo2 _submit_info = getSubmitInfo2(&_cmd_submit_info);
+
+        VK_TRY(vkQueueSubmit2(queues.transfer, 1, &_submit_info, queues.immediate.fence));
+        VK_TRY(vkWaitForFences(logical_device, 1, &queues.immediate.fence, VK_TRUE, UINT64_MAX));
+    }
+
+MeshBuffer NovaCore::createMeshBuffer(std::span<uint32_t> idx, std::span<Vertex_T> vtx)
+    {
+        const size_t VERTEX_BUFFER_SIZE = vtx.size() * sizeof(Vertex_T);
+        const size_t INDEX_BUFFER_SIZE = idx.size() * sizeof(uint32_t);
+
+        MeshBuffer buffer;
+
+        buffer.vtx_buffer = createEphemeralBuffer(VERTEX_BUFFER_SIZE, VK_BUFFER_USAGE_VERTEX_BUFFER_BIT | VK_BUFFER_USAGE_TRANSFER_DST_BIT | VK_BUFFER_USAGE_SHADER_DEVICE_ADDRESS_BIT, VMA_MEMORY_USAGE_GPU_ONLY);
+        VkBufferDeviceAddressInfo _buffer_info = { 
+            .sType = VK_STRUCTURE_TYPE_BUFFER_DEVICE_ADDRESS_INFO,
+            .pNext = nullptr,
+            .buffer = buffer.vtx_buffer.buffer
+        };
+        buffer.buffer_address = vkGetBufferDeviceAddress(logical_device, &_buffer_info);
+
+        buffer.idx_buffer = createEphemeralBuffer(INDEX_BUFFER_SIZE,  VK_BUFFER_USAGE_INDEX_BUFFER_BIT | VK_BUFFER_USAGE_TRANSFER_DST_BIT, VMA_MEMORY_USAGE_GPU_ONLY);
+
+        Buffer_T staging_buffer = createEphemeralBuffer(VERTEX_BUFFER_SIZE + INDEX_BUFFER_SIZE, VK_BUFFER_USAGE_TRANSFER_SRC_BIT, VMA_MEMORY_USAGE_CPU_ONLY);
+        void *data = staging_buffer.allocation->GetMappedData();
+
+        memcpy(data, vtx.data(), VERTEX_BUFFER_SIZE);
+        memcpy((char*)data + VERTEX_BUFFER_SIZE, idx.data(), INDEX_BUFFER_SIZE);
+
+        immediateSubmit([&](VkCommandBuffer cmd) {
+            VkBufferCopy _vertex_copy = {
+                .srcOffset = 0,
+                .dstOffset = 0,
+                .size = VERTEX_BUFFER_SIZE
+            };
+
+            vkCmdCopyBuffer(cmd, staging_buffer.buffer, buffer.vtx_buffer.buffer, 1, &_vertex_copy);
+
+            VkBufferCopy _index_copy = {
+                .srcOffset = VERTEX_BUFFER_SIZE,
+                .dstOffset = 0,
+                .size = INDEX_BUFFER_SIZE
+            };
+            vkCmdCopyBuffer(cmd, staging_buffer.buffer, buffer.idx_buffer.buffer, 1, &_index_copy);
+        });
+
+        vmaDestroyBuffer(allocator, staging_buffer.buffer, staging_buffer.allocation);
+        return buffer;
     }
